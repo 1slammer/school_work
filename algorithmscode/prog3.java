@@ -1,8 +1,4 @@
-import java.util.Scanner;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.ArrayList;
+import java.util.*;
 
 public class prog3 { 
     int MAX_VALUE = Integer.MAX_VALUE; 
@@ -16,21 +12,83 @@ public class prog3 {
     } 
 
     public Graph MST_KRUSKAL(Graph G) {
-  // implement Kruskal's algorithm here 
-    }
+  // implement Kruskal's algorithm here
+      //Set<Edge> A = new HashSet<Edge>();
+      Graph mg = new Graph();
+      mg.nodeList = G.nodeList;
+      mg.numNodes = G.numNodes;
+        for(Node k: mg.nodeList) {
+          k.adj = new ArrayList<Node>();
+          k.adjEdges = new ArrayList<Edge>();
+        }
+       
 
+        for (Node n : G.nodeList){
+          MAKESET(n);
+        } 
+        Collections.sort(G.edgeList, new Comparator<Edge>() {
+          @Override
+          public int compare(Edge e1, Edge e2) {
+            return e1.weight - e2.weight;
+          }
+        });
+        for (Edge e: G.edgeList){
+          if (e.head != null && e.tail != null){
+          if (FINDSET(e.head) != (FINDSET(e.tail))){
+            
+              mg.addEdge(e.head, e.tail, e.weight);
+
+              Set<Node> newSet = UNION(e.head, e.tail);
+              nodeSet.add(newSet);
+
+          }
+        }
+        }
+          /*ArrayList<Edge> edges = new ArrayList<Edge>();
+          ArrayList<Node> nodes = new ArrayList<Node>();
+          for (Edge p: A) edges.add(p);
+          for (Edge p: A) { if(!(nodes.contains(p.head)))
+            nodes.add(p.head);
+            if(!(nodes.contains(p.tail)))
+            nodes.add(p.tail);
+          }*/
+        
+        return mg;
+  }
     // utility functions for sets of nodes 
     public Set<Node> UNION(Node u, Node v) { 
   // implement UNION here
+      Set<Node> temp1 = new HashSet<Node>();
+      Set<Node> temp2 = new HashSet<Node>();
+      for(Set s: nodeSet){
+        if (s.contains(u)){ temp1 = s;
+           
+        }
+        if (s.contains(v)) {temp2 = s;
+        }
+      }
+        boolean x = nodeSet.remove(temp1);
+        boolean y = nodeSet.remove(temp2);
+        temp1.addAll(temp2);
+        return temp1;
+
     }
 
     public Set<Node>  MAKESET(Node u) { 
   // implement MAKESET here
+      Set<Node> temp = new HashSet<Node>();
+      temp.add(u);
+      nodeSet.add(temp);
+    
+    return temp;
     }
- 
     
     public Set<Node>  FINDSET(Node u) {
   // implement FINDSET here
+      for(Set<Node> s: nodeSet){
+        if (s.contains(u)) return s;
+              }
+      return null;
     }
     
 
